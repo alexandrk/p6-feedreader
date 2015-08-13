@@ -16,6 +16,7 @@ $(function() {
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
+            expect(allFeeds instanceof Array).toBeTruthy();
             expect(allFeeds.length).not.toBe(0);
         });
 
@@ -23,9 +24,10 @@ $(function() {
         /* Loops through each feed in the allFeeds object and ensures
          * it has a URL defined and that the URL is not empty.
          */
-        it('url property present for each feed item', function() {
+        it('valid url property present for each feed item', function() {
             allFeeds.forEach(function(item) {
                 expect(item.url).toBeDefined();
+                expect(item.url).toMatch(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6}).*\/?$/)
             });
         });
 
@@ -33,9 +35,11 @@ $(function() {
         /* Loops through each feed in the allFeeds object and ensures
          * it has a name defined and that the name is not empty.
          */
-        it('name property present for each feed item', function() {
+        it('name property present and is valid for each feed item', function() {
             allFeeds.forEach(function(item) {
                 expect(item.name).toBeDefined();
+                expect(typeof item.name).toBe('string');
+                expect(item.name.length).toBeGreaterThan(0);
             });
         });
     });
@@ -89,8 +93,9 @@ $(function() {
 
         beforeEach(function(done) {
 
-            // First async call with a callback to a a second one
-            // to populate '.feed' section with different information
+            /* First async call with a callback to a a second one
+             * to populate '.feed' section with different information
+             */
             loadFeed(0, function() {
                 firstFeedItem = $('.feed').find('.entry');
 
